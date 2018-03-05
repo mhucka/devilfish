@@ -101,13 +101,18 @@ on askDtDestination()
 	return {theDtDestination, theTags, saveExternally}
 end askDtDestination
 
-on baseFileName(theTitle)
+on generateBaseFileName(theTitle)
 	set {year:y, month:m, day:d} to (current date)
 	set fileName to do shell script "echo " & quoted form of theTitle & " | sed 's|[^a-zA-Z0-9 ]||g'"
 	set fileName to trim(fileName)
 	set firstChar to character 1 of fileName
-	return archiveRootPath & "/" & firstChar & "/" & y & "/" & fileName
-end baseFileName
+	set directoryPath to archiveRootPath & "/" & firstChar & "/" & y
+	# Make sure path exists. I'm tired of dealing with AppleScript path conversions
+	# so I'm just going to call out to the shell here.
+	do shell script "mkdir -p '" & directoryPath & "'"
+	set baseFileName to directoryPath & "/" & fileName
+	return baseFileName
+end generateBaseFileName
 
 on createPDFinDt(theDestination, theURL, theTitle, theTags, destinationPath)
 	tell application id "DNtp"
@@ -175,7 +180,7 @@ end tell
 set {theDestination, theTags, saveExternallyToo} to askDtDestination()
 set {theURL, theTitle, selectedText} to my getWebPageData()
 
-set destinationPath to baseFileName(theTitle) & ".webarchive"
+set destinationPath to generateBaseFileName(theTitle) & ".webarchive"
 set {dtRecord, theUUID} to my createPDFinDt(theDestination, theURL, theTitle, theTags, destinationPath)
 set dtArchive to my createWebArchiveInDt(theDestination, theURL, theTitle)
 moveArchiveToDestination(dtArchive, destinationPath, theUUID, theURL)
