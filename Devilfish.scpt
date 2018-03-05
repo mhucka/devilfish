@@ -80,7 +80,7 @@ on getWebPageData()
 	return {theURL, theTitle, selectedText}
 end getWebPageData
 
-on askDestination()
+on askDtDestination()
 	tell application "System Events"
 		set activeApp to name of first application process whose frontmost is true
 	end tell
@@ -99,7 +99,7 @@ on askDestination()
 		activate
 	end tell
 	return {theDtDestination, theTags, saveExternally}
-end askDestination
+end askDtDestination
 
 on baseFileName(theTitle)
 	set {year:y, month:m, day:d} to (current date)
@@ -172,7 +172,7 @@ tell application "System Events"
 	set visible of application process "DEVONthink Pro" to false
 end tell
 
-set {theDestination, theTags, saveExternallyToo} to askDestination()
+set {theDestination, theTags, saveExternallyToo} to askDtDestination()
 set {theURL, theTitle, selectedText} to my getWebPageData()
 
 set destinationPath to baseFileName(theTitle) & ".webarchive"
