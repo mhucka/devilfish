@@ -12,7 +12,7 @@
 global archiveRootPath
 
 set home to get path to home folder as string
-set archiveRootPath to POSIX path of home & "resources/web-archives"
+set archiveRootPath to POSIX path of home & "archives/web-archives"
 
 
 -- Utility functions.
